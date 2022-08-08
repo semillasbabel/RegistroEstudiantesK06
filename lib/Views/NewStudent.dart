@@ -1,4 +1,4 @@
-// ignore_for_file: deprecated_member_use
+// ignore_for_file: deprecated_member_use, unused_local_variable
 
 import 'package:flutter/material.dart';
 import 'package:studentregistration/Controlador/StudentsController.dart';
@@ -56,6 +56,7 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
       }
     } on FormatException {
       mostrarAviso(context, "La edad debe ser un numero");
+      agecontroller.text = "";
     }
   }
 

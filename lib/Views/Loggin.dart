@@ -109,33 +109,33 @@ class _LogginState extends State<Loggin> {
   }
 
   void validar(BuildContext context) {
-    if (txtUser.text != "") {
-      if (txtPassword.text != "") {
-        if (lbdc.valiuser(txtUser.text)) {
-          if (lbdc.valipassword(txtPassword.text)) {
-            //Codigo en caso que el loggin sea exitoso
-            txtUser.text = "";
-            txtPassword.text = "";
-            store.close();
-            Navigator.popAndPushNamed(context, "ViewStudents");
-          } else {
-            mostrarAviso(
-                context, "Usuario y contraseña incorrectos, favor reintente");
-          }
-        } else {
-          mostrarAviso(
-              context, "Usuario y contraseña incorrectos, favor reintente");
-        }
-      } else {
-        mostrarAviso(context, "El campo contraseña no puede estar vacío");
-      }
-    } else {
-      mostrarAviso(context, "El campo usuario no puede estar vacío");
-    }
-    // txtUser.text = "";
-    // txtPassword.text = "";
-    // store.close();
-    // Navigator.popAndPushNamed(context, "ViewStudents");
+    // if (txtUser.text != "") {
+    //   if (txtPassword.text != "") {
+    //     if (lbdc.valiuser(txtUser.text)) {
+    //       if (lbdc.valipassword(txtPassword.text)) {
+    //         //Codigo en caso que el loggin sea exitoso
+    //         txtUser.text = "";
+    //         txtPassword.text = "";
+    //         store.close();
+    //         Navigator.popAndPushNamed(context, "ViewStudents");
+    //       } else {
+    //         mostrarAviso(
+    //             context, "Usuario y contraseña incorrectos, favor reintente");
+    //       }
+    //     } else {
+    //       mostrarAviso(
+    //           context, "Usuario y contraseña incorrectos, favor reintente");
+    //     }
+    //   } else {
+    //     mostrarAviso(context, "El campo contraseña no puede estar vacío");
+    //   }
+    // } else {
+    //   mostrarAviso(context, "El campo usuario no puede estar vacío");
+    // }
+    txtUser.text = "";
+    txtPassword.text = "";
+    store.close();
+    Navigator.popAndPushNamed(context, "ViewStudents");
   }
 }
 

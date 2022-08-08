@@ -25,7 +25,7 @@ Widget TextForm(
         border: UnderlineInputBorder(),
       ),
       validator: (value) {
-        if (value!.isEmpty) {
+        if (value == "") {
           return 'Ingrese un dato';
         }
       },

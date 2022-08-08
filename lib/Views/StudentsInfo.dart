@@ -1,4 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first, deprecated_member_use
+// ignore_for_file: public_member_api_docs, sort_constructors_first, deprecated_member_use, unused_local_variable
 import 'package:flutter/material.dart';
 import 'package:objectbox/objectbox.dart';
 import 'package:studentregistration/Controlador/StudentsController.dart';
@@ -61,7 +61,13 @@ class _studeninfState extends State<studeninf> {
     if (llaveform.currentState!.validate()) {
       llaveform.currentState!.save();
       //------------------------------------------------------
-      onUpdate();
+      try {
+        int edad = int.parse(agecontroller.text);
+        onUpdate();
+      } on FormatException {
+        mostrarAviso(context, "La edad tiene que ser un numero.");
+        agecontroller.text = "";
+      }
       //------------------------------------------------------
     }
   }
@@ -113,12 +119,55 @@ class _studeninfState extends State<studeninf> {
                     SizedBox(
                       width: 25,
                     ),
-                    BtnGen(onUpdate, "Modificar")
+                    BtnGen(Validar, "Modificar")
                   ],
                 )
               ],
             )),
           ),
         ));
+  }
+
+  void mostrarAviso(BuildContext context, String info) {
+    //AlertDialog en caso que no se encuentre ningún auto en el parqueo
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            backgroundColor: const Color.fromARGB(255, 19, 49, 60),
+            title: const Text("¡Información!",
+                style: TextStyle(color: Colors.white),
+                textAlign: TextAlign.center),
+            content: Text(
+              info,
+              style: const TextStyle(color: Colors.white),
+              textAlign: TextAlign.center,
+            ),
+            actions: [
+              //----------------------------------
+              //Buton OK para salir del AlertDialog
+              Center(
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  style: ElevatedButton.styleFrom(
+                      primary: const Color.fromARGB(255, 10, 33, 41),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 30, vertical: 15),
+                      textStyle: const TextStyle(
+                          fontSize: 15, fontWeight: FontWeight.bold)),
+                  child: const Text('Entendido'),
+                ),
+              ),
+              //----------------------------------
+            ],
+            // Codigo para darle border redondos al cuadro del AlertDialog
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          );
+        },
+        //Ocultar el dialogo al precionar fuera de el
+        barrierDismissible: true);
   }
 }
