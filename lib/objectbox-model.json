@@ -1,0 +1,83 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": "1:7053869899012760236",
+      "lastPropertyId": "7:4609991831866371756",
+      "name": "Students",
+      "properties": [
+        {
+          "id": "1:6119564519404590695",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:4644533595594259818",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "4:2375479209113812605",
+          "name": "age",
+          "type": 6
+        },
+        {
+          "id": "5:6995318923906911124",
+          "name": "dateofbirth",
+          "type": 9
+        },
+        {
+          "id": "6:1048384340300023877",
+          "name": "hobbits",
+          "type": 9
+        },
+        {
+          "id": "7:4609991831866371756",
+          "name": "descriptions",
+          "type": 9
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "2:7303514288687312156",
+      "lastPropertyId": "3:523674829231450897",
+      "name": "Login",
+      "properties": [
+        {
+          "id": "1:8792316115837774405",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:987969799098317153",
+          "name": "User",
+          "type": 9
+        },
+        {
+          "id": "3:523674829231450897",
+          "name": "Password",
+          "type": 9
+        }
+      ],
+      "relations": []
+    }
+  ],
+  "lastEntityId": "2:7303514288687312156",
+  "lastIndexId": "0:0",
+  "lastRelationId": "0:0",
+  "lastSequenceId": "0:0",
+  "modelVersion": 5,
+  "modelVersionParserMinimum": 5,
+  "retiredEntityUids": [],
+  "retiredIndexUids": [],
+  "retiredPropertyUids": [
+    7260937482832547074
+  ],
+  "retiredRelationUids": [],
+  "version": 1
+}
