@@ -1,6 +1,7 @@
 // ignore_for_file: file_names, must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:studentregistration/Controlador/LogginController.dart';
 import 'package:studentregistration/Models/BD.dart';
 import 'package:studentregistration/objectbox.g.dart';
 
@@ -12,42 +13,20 @@ class Loggin extends StatefulWidget {
 }
 
 class _LogginState extends State<Loggin> {
-  final Loginlist = <Login>[];
-
   late final Store store;
-
   late final Box<Login> LoginBox;
 
+  var lbdc = LogginController();
+
   TextEditingController txtUser = TextEditingController();
-
   TextEditingController txtPassword = TextEditingController();
-
-  final GlobalKey<FormState> formKey = GlobalKey();
 
   Future<void> loadStore() async {
     store = await openStore();
     LoginBox = store.box<Login>();
-    nuevoadmin();
-    loadStudents();
-  }
-
-  void nuevoadmin() {
-    if (Loginlist.isEmpty) {
-      var result =
-          Login(User: "keiler.cortes@grupobabel.com", Password: "12345");
-      LoginBox.put(result);
-      result = Login(User: "andres.diaz@grupobabel.com", Password: "12345");
-      LoginBox.put(result);
-      result = Login(User: "hugo.chinchilla@grupobabel.com", Password: "12345");
-      LoginBox.put(result);
-    }
-  }
-
-  void loadStudents() {
-    Loginlist.clear();
-    setState(() {
-      Loginlist.addAll(LoginBox.getAll());
-    });
+    lbdc.setboxBD = LoginBox;
+    lbdc.nuevoadmin();
+    lbdc.loadStudents();
   }
 
   @override
@@ -65,47 +44,44 @@ class _LogginState extends State<Loggin> {
         centerTitle: true,
         backgroundColor: const Color.fromARGB(255, 10, 33, 41),
       ),
-      body: Form(
-        key: formKey,
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                margin: const EdgeInsets.fromLTRB(50, 0, 50, 0),
-                child: Column(
-                  children: [
-                    Image.asset('assets/Loggin.png'),
-                    const SizedBox(height: 20),
-                    //---------------Divición---------------
-                    _formsCreator(
-                        txtUser, TextInputType.emailAddress, false, "Usuario"),
-                    //---------------Divición---------------
-                    const SizedBox(height: 20),
-                    //---------------Divición---------------
-                    _formsCreator(
-                        txtPassword, TextInputType.text, true, "Contraseña"),
-                    //---------------Divición---------------
-                    const SizedBox(height: 40),
-                    //---------------Divición---------------
-                    ElevatedButton(
-                      onPressed: () {
-                        validar(context);
-                      },
-                      style: ElevatedButton.styleFrom(
-                          primary: const Color.fromARGB(255, 19, 49, 60),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 30, vertical: 15),
-                          textStyle: const TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.bold)),
-                      child: const Text('Ingresar'),
-                    ),
-                    //---------------Divición---------------
-                  ],
-                ),
+      body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              margin: const EdgeInsets.fromLTRB(50, 0, 50, 0),
+              child: Column(
+                children: [
+                  Image.asset('assets/Loggin.png'),
+                  const SizedBox(height: 20),
+                  //---------------Divición---------------
+                  _formsCreator(
+                      txtUser, TextInputType.emailAddress, false, "Usuario"),
+                  //---------------Divición---------------
+                  const SizedBox(height: 20),
+                  //---------------Divición---------------
+                  _formsCreator(
+                      txtPassword, TextInputType.text, true, "Contraseña"),
+                  //---------------Divición---------------
+                  const SizedBox(height: 40),
+                  //---------------Divición---------------
+                  ElevatedButton(
+                    onPressed: () {
+                      validar(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                        primary: const Color.fromARGB(255, 19, 49, 60),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 30, vertical: 15),
+                        textStyle: const TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.bold)),
+                    child: const Text('Ingresar'),
+                  ),
+                  //---------------Divición---------------
+                ],
               ),
-            ]),
-      ),
+            ),
+          ]),
     );
   }
 
@@ -133,43 +109,33 @@ class _LogginState extends State<Loggin> {
   }
 
   void validar(BuildContext context) {
-    if (valiuser()) {
-      if (valipassword()) {
-        //Codigo en caso que el loggin sea exitoso
-        txtUser.text = "";
-        txtPassword.text = "";
-        store.close();
-        Navigator.popAndPushNamed(context, "ViewStudents");
+    if (txtUser.text != "") {
+      if (txtPassword.text != "") {
+        if (lbdc.valiuser(txtUser.text)) {
+          if (lbdc.valipassword(txtPassword.text)) {
+            //Codigo en caso que el loggin sea exitoso
+            txtUser.text = "";
+            txtPassword.text = "";
+            store.close();
+            Navigator.popAndPushNamed(context, "ViewStudents");
+          } else {
+            mostrarAviso(
+                context, "Usuario y contraseña incorrectos, favor reintente");
+          }
+        } else {
+          mostrarAviso(
+              context, "Usuario y contraseña incorrectos, favor reintente");
+        }
       } else {
-        mostrarAviso(
-            context, "Usuario y contraseña incorrectos, favor reintente");
+        mostrarAviso(context, "El campo contraseña no puede estar vacío");
       }
     } else {
-      mostrarAviso(
-          context, "Usuario y contraseña incorrectos, favor reintente");
+      mostrarAviso(context, "El campo usuario no puede estar vacío");
     }
     // txtUser.text = "";
     // txtPassword.text = "";
     // store.close();
     // Navigator.popAndPushNamed(context, "ViewStudents");
-  }
-
-  bool valiuser() {
-    for (var i = 0; i < Loginlist.length; i++) {
-      if (txtUser.text == Loginlist[i].User) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  bool valipassword() {
-    for (var i = 0; i < Loginlist.length; i++) {
-      if (txtPassword.text == Loginlist[i].Password) {
-        return true;
-      }
-    }
-    return false;
   }
 }
 

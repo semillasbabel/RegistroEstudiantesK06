@@ -1,8 +1,10 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: public_member_api_docs, sort_constructors_first, deprecated_member_use
 import 'package:flutter/material.dart';
 import 'package:objectbox/objectbox.dart';
+import 'package:studentregistration/Controlador/StudentsController.dart';
 import 'package:studentregistration/Models/BD.dart';
 import 'package:intl/intl.dart';
+import 'package:studentregistration/Views/widgets.dart';
 
 class studeninf extends StatefulWidget {
   studeninf({
@@ -24,6 +26,8 @@ class _studeninfState extends State<studeninf> {
   final hobbitscontroller = TextEditingController();
   final descriptioncontroller = TextEditingController();
 
+  var bdc = StudentController();
+
   final llaveform = GlobalKey<FormState>();
 
   @override
@@ -36,18 +40,20 @@ class _studeninfState extends State<studeninf> {
     super.initState();
   }
 
-  void onSave() {
-    widget.estudiante.name = namecontroller.text;
-    widget.estudiante.age = int.parse(agecontroller.text);
-    widget.estudiante.dateofbirth = dateofbirthcontroller.text;
-    widget.estudiante.hobbits = hobbitscontroller.text;
-    widget.estudiante.descriptions = descriptioncontroller.text;
-    widget.boxstudent.put(widget.estudiante);
+  void onUpdate() {
+    bdc.setboxBD = widget.boxstudent;
+    bdc.name = namecontroller.text;
+    bdc.age = int.parse(agecontroller.text);
+    bdc.dateofbirth = dateofbirthcontroller.text;
+    bdc.hobbits = hobbitscontroller.text;
+    bdc.descriptions = descriptioncontroller.text;
+    bdc.onUpdate(widget.estudiante);
     Navigator.of(context).pop();
   }
 
   void ondelete() {
-    widget.boxstudent.remove(widget.estudiante.id);
+    bdc.setboxBD = widget.boxstudent;
+    bdc.onDelete(widget.estudiante.id);
     Navigator.of(context).pop();
   }
 
@@ -55,9 +61,24 @@ class _studeninfState extends State<studeninf> {
     if (llaveform.currentState!.validate()) {
       llaveform.currentState!.save();
       //------------------------------------------------------
-      onSave();
+      onUpdate();
       //------------------------------------------------------
     }
+  }
+
+  void obtfecha() async {
+    try {
+      await showDatePicker(
+              context: context,
+              initialDate: DateTime.now(),
+              firstDate: DateTime(1700),
+              lastDate: DateTime(2050))
+          .then((pickedDate) {
+        dateofbirthcontroller.text =
+            DateFormat("dd-MM-yyyy").format(pickedDate!);
+      });
+      setState(() {});
+    } on CastError {}
   }
 
   @override
@@ -76,114 +97,28 @@ class _studeninfState extends State<studeninf> {
               children: [
                 TextForm(namecontroller, TextInputType.text, "Nombre", 1),
                 TextForm(agecontroller, TextInputType.number, "Edad", 1),
-                DateForm(dateofbirthcontroller, "Fecha Nacimiento"),
+                // DateForm(dateofbirthcontroller, "Fecha Nacimiento"),
                 TextForm(
-                    hobbitscontroller, TextInputType.text, "Pasatiempos", 2),
+                    hobbitscontroller, TextInputType.text, "Pasatiempos", 1),
                 TextForm(descriptioncontroller, TextInputType.text,
-                    "Descripción", 2),
+                    "Descripción", 1),
+                Btnfecha(obtfecha, "FechaNac", dateofbirthcontroller),
                 SizedBox(
                   height: 20,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    BtnEliminar(),
+                    BtnGen(ondelete, "Eliminar"),
                     SizedBox(
                       width: 25,
                     ),
-                    BtnModificar(),
+                    BtnGen(onUpdate, "Modificar")
                   ],
                 )
               ],
             )),
           ),
         ));
-  }
-
-  Widget TextForm(
-    TextEditingController controller,
-    TextInputType tipo,
-    String texto,
-    int numlines,
-  ) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 50),
-      child: TextFormField(
-        controller: controller,
-        textAlign: TextAlign.center,
-        maxLines: numlines,
-        style:
-            const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-        keyboardType: tipo,
-        decoration: InputDecoration(
-          labelStyle: const TextStyle(color: Colors.white),
-          labelText: texto,
-          border: UnderlineInputBorder(),
-        ),
-        validator: (value) {
-          if (value!.isEmpty) {
-            return 'Ingrese un dato';
-          }
-        },
-      ),
-    );
-  }
-
-  Widget DateForm(
-    TextEditingController controller,
-    String texto,
-  ) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 50),
-      child: TextFormField(
-        controller: controller,
-        textAlign: TextAlign.center,
-        style:
-            const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-        keyboardType: TextInputType.datetime,
-        onTap: () {
-          showDatePicker(
-                  context: context,
-                  initialDate: DateTime.now(),
-                  firstDate: DateTime(1700),
-                  lastDate: DateTime(2050))
-              .then((pickedDate) {
-            controller.text = DateFormat("dd-MM-yyyy").format(pickedDate!);
-          });
-        },
-        decoration: InputDecoration(
-          labelStyle: const TextStyle(color: Colors.white),
-          labelText: texto,
-          border: UnderlineInputBorder(),
-        ),
-        validator: (value) {
-          if (value!.isEmpty) {
-            return 'Ingrese un dato';
-          }
-        },
-      ),
-    );
-  }
-
-  Widget BtnEliminar() {
-    return ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          primary: const Color.fromARGB(255, 19, 49, 60),
-        ),
-        onPressed: () {
-          ondelete();
-        },
-        child: Text("Eliminar"));
-  }
-
-  Widget BtnModificar() {
-    return ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          primary: const Color.fromARGB(255, 19, 49, 60),
-        ),
-        onPressed: () {
-          Validar();
-        },
-        child: Text("Modificar"));
   }
 }

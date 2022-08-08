@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:studentregistration/Controlador/StudentsController.dart';
 import 'package:studentregistration/Models/BD.dart';
 import 'package:studentregistration/Views/NewStudent.dart';
 import 'package:studentregistration/Views/StudentsInfo.dart';
@@ -11,18 +12,19 @@ class StudentView extends StatefulWidget {
 }
 
 class _StudentViewState extends State<StudentView> {
-  final studentlist = <Students>[];
-  var ListStudents = <String>[];
+  var studentlist = <Students>[];
   late final Store store;
   late final Box<Students> studentBox;
+  var bdc = StudentController();
 
-  Future<void> loadStore() async {
+  Future<void> loadBD() async {
     store = await openStore();
     studentBox = store.box<Students>();
-    loadStudents();
+    bdc.setboxBD = studentBox;
+    loadlist();
   }
 
-  void loadStudents() {
+  void loadlist() {
     studentlist.clear();
     setState(() {
       studentlist.addAll(studentBox.getAll());
@@ -31,28 +33,25 @@ class _StudentViewState extends State<StudentView> {
 
   @override
   void initState() {
-    loadStore();
+    loadBD();
     super.initState();
   }
 
-  Future<void> addStudent() async {
-    final result = await showDialog(
-      context: context,
-      builder: (context) => const AddStudentScreen(),
-    );
-    if (result != null && result is Students) {
-      studentBox.put(result);
-      loadStudents();
-    }
+  void addStudent() async {
+    await Navigator.of(context).push(MaterialPageRoute(
+        builder: (_) => AddStudentScreen(
+              boxstudent: studentBox,
+            )));
+    loadlist();
   }
 
-  Future<void> verInfo(Students estudiante) async {
+  Future<void> infoStudent(Students estudiante) async {
     await Navigator.of(context).push(MaterialPageRoute(
         builder: (_) => studeninf(
               boxstudent: studentBox,
               estudiante: estudiante,
             )));
-    loadStudents();
+    loadlist();
   }
 
   @override
@@ -88,7 +87,7 @@ class _StudentViewState extends State<StudentView> {
                     itemBuilder: (BuildContext context, int i) {
                       return ListTile(
                         title: Text(
-                          "Nombre: ${studentlist[i].name} edad: ${studentlist[i].age}",
+                          "Nombre: ${studentlist[i].name}.  edad: ${studentlist[i].age}.",
                           style: TextStyle(color: Colors.white),
                         ),
                         leading: const Icon(
@@ -96,7 +95,7 @@ class _StudentViewState extends State<StudentView> {
                           color: Colors.white,
                         ),
                         onTap: () {
-                          verInfo(studentlist[i]);
+                          infoStudent(studentlist[i]);
                         },
                       );
                     },
