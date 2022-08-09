@@ -21,7 +21,7 @@ class LogginController {
     }
   }
 
-  void loadStudents() {
+  void loadAdmins() {
     _Loginlist.clear();
     _Loginlist.addAll(_LoginBox.getAll());
   }

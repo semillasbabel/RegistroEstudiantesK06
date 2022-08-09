@@ -26,7 +26,7 @@ class _LogginState extends State<Loggin> {
     LoginBox = store.box<Login>();
     lbdc.setboxBD = LoginBox;
     lbdc.newadmin();
-    lbdc.loadStudents();
+    lbdc.loadAdmins();
   }
 
   @override
