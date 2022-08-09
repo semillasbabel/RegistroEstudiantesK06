@@ -9,7 +9,7 @@ class LogginController {
     _LoginBox = box;
   }
 
-  void nuevoadmin() {
+  void newadmin() {
     if (_Loginlist.isEmpty) {
       var result =
           Login(User: "keiler.cortes@grupobabel.com", Password: "12345");

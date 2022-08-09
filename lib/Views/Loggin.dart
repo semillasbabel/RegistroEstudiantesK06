@@ -25,7 +25,7 @@ class _LogginState extends State<Loggin> {
     store = await openStore();
     LoginBox = store.box<Login>();
     lbdc.setboxBD = LoginBox;
-    lbdc.nuevoadmin();
+    lbdc.newadmin();
     lbdc.loadStudents();
   }
 
