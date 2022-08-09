@@ -54,17 +54,12 @@ class _LogginState extends State<Loggin> {
                 children: [
                   Image.asset('assets/Loggin.png'),
                   const SizedBox(height: 20),
-                  //---------------Divición---------------
                   _formsCreator(
                       txtUser, TextInputType.emailAddress, false, "Usuario"),
-                  //---------------Divición---------------
                   const SizedBox(height: 20),
-                  //---------------Divición---------------
                   _formsCreator(
                       txtPassword, TextInputType.text, true, "Contraseña"),
-                  //---------------Divición---------------
                   const SizedBox(height: 40),
-                  //---------------Divición---------------
                   ElevatedButton(
                     onPressed: () {
                       validar(context);
@@ -77,7 +72,6 @@ class _LogginState extends State<Loggin> {
                             fontSize: 15, fontWeight: FontWeight.bold)),
                     child: const Text('Ingresar'),
                   ),
-                  //---------------Divición---------------
                 ],
               ),
             ),
@@ -109,38 +103,37 @@ class _LogginState extends State<Loggin> {
   }
 
   void validar(BuildContext context) {
-    // if (txtUser.text != "") {
-    //   if (txtPassword.text != "") {
-    //     if (lbdc.valiuser(txtUser.text)) {
-    //       if (lbdc.valipassword(txtPassword.text)) {
-    //         //Codigo en caso que el loggin sea exitoso
-    //         txtUser.text = "";
-    //         txtPassword.text = "";
-    //         store.close();
-    //         Navigator.popAndPushNamed(context, "ViewStudents");
-    //       } else {
-    //         mostrarAviso(
-    //             context, "Usuario y contraseña incorrectos, favor reintente");
-    //       }
-    //     } else {
-    //       mostrarAviso(
-    //           context, "Usuario y contraseña incorrectos, favor reintente");
-    //     }
-    //   } else {
-    //     mostrarAviso(context, "El campo contraseña no puede estar vacío");
-    //   }
-    // } else {
-    //   mostrarAviso(context, "El campo usuario no puede estar vacío");
-    // }
-    txtUser.text = "";
-    txtPassword.text = "";
-    store.close();
-    Navigator.popAndPushNamed(context, "ViewStudents");
+    if (txtUser.text != "") {
+      if (txtPassword.text != "") {
+        if (lbdc.valiuser(txtUser.text)) {
+          if (lbdc.valipassword(txtPassword.text)) {
+            //Codigo en caso que el loggin sea exitoso
+            txtUser.text = "";
+            txtPassword.text = "";
+            store.close();
+            Navigator.popAndPushNamed(context, "ViewStudents");
+          } else {
+            mostrarAviso(
+                context, "Usuario y contraseña incorrectos, favor reintente");
+          }
+        } else {
+          mostrarAviso(
+              context, "Usuario y contraseña incorrectos, favor reintente");
+        }
+      } else {
+        mostrarAviso(context, "El campo contraseña no puede estar vacío");
+      }
+    } else {
+      mostrarAviso(context, "El campo usuario no puede estar vacío");
+    }
+    // txtUser.text = "";
+    // txtPassword.text = "";
+    // store.close();
+    // Navigator.popAndPushNamed(context, "ViewStudents");
   }
 }
 
 void mostrarAviso(BuildContext context, String info) {
-  //AlertDialog en caso que no se encuentre ningún auto en el parqueo
   showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -155,8 +148,6 @@ void mostrarAviso(BuildContext context, String info) {
             textAlign: TextAlign.center,
           ),
           actions: [
-            //----------------------------------
-            //Buton OK para salir del AlertDialog
             Center(
               child: ElevatedButton(
                 onPressed: () {
@@ -171,13 +162,10 @@ void mostrarAviso(BuildContext context, String info) {
                 child: const Text('Entendido'),
               ),
             ),
-            //----------------------------------
           ],
-          // Codigo para darle border redondos al cuadro del AlertDialog
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         );
       },
-      //Ocultar el dialogo al precionar fuera de el
       barrierDismissible: true);
 }

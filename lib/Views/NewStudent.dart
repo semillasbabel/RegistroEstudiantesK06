@@ -36,7 +36,6 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
     try {
       if (llaveform.currentState!.validate()) {
         llaveform.currentState!.save();
-        //------------------------------------------------------
         if (dateofbirthcontroller.text != "Click") {
           int edad = int.parse(agecontroller.text);
           bdc.setboxBD = widget.boxstudent;
@@ -52,7 +51,6 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
           mostrarAviso(context,
               "Debes seleccionar una fecha de nacimiento para añadir un estudiante");
         }
-        //------------------------------------------------------
       }
     } on FormatException {
       mostrarAviso(context, "La edad debe ser un numero");
@@ -104,7 +102,6 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
   }
 
   void mostrarAviso(BuildContext context, String info) {
-    //AlertDialog en caso que no se encuentre ningún auto en el parqueo
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -119,8 +116,6 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
               textAlign: TextAlign.center,
             ),
             actions: [
-              //----------------------------------
-              //Buton OK para salir del AlertDialog
               Center(
                 child: ElevatedButton(
                   onPressed: () {
@@ -135,14 +130,11 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
                   child: const Text('Entendido'),
                 ),
               ),
-              //----------------------------------
             ],
-            // Codigo para darle border redondos al cuadro del AlertDialog
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           );
         },
-        //Ocultar el dialogo al precionar fuera de el
         barrierDismissible: true);
   }
 }

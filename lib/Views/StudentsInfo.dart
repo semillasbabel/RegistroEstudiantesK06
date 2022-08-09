@@ -60,7 +60,6 @@ class _studeninfState extends State<studeninf> {
   void Validar() {
     if (llaveform.currentState!.validate()) {
       llaveform.currentState!.save();
-      //------------------------------------------------------
       try {
         int edad = int.parse(agecontroller.text);
         onUpdate();
@@ -68,7 +67,6 @@ class _studeninfState extends State<studeninf> {
         mostrarAviso(context, "La edad tiene que ser un numero.");
         agecontroller.text = "";
       }
-      //------------------------------------------------------
     }
   }
 
@@ -129,7 +127,6 @@ class _studeninfState extends State<studeninf> {
   }
 
   void mostrarAviso(BuildContext context, String info) {
-    //AlertDialog en caso que no se encuentre ningún auto en el parqueo
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -145,7 +142,6 @@ class _studeninfState extends State<studeninf> {
             ),
             actions: [
               //----------------------------------
-              //Buton OK para salir del AlertDialog
               Center(
                 child: ElevatedButton(
                   onPressed: () {
@@ -162,12 +158,10 @@ class _studeninfState extends State<studeninf> {
               ),
               //----------------------------------
             ],
-            // Codigo para darle border redondos al cuadro del AlertDialog
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           );
         },
-        //Ocultar el dialogo al precionar fuera de el
         barrierDismissible: true);
   }
 }
